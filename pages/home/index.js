@@ -1,60 +1,41 @@
 import AppLayout from "components/AppLayout"
 import { useEffect, useState } from "react"
 import Adrit from "components/Adrit"
+import s from "styles/HomePage.module.css"
+import useUser from "hooks/useUser"
+import { fetchLatestAdrits } from "firebase/client"
 
 export default function HomePage() {
   const [timeline, setTimeline] = useState([])
+  const user = useUser()
 
   useEffect(() => {
-    fetch("/api/statuses/home_timeline")
-      .then((res) => res.json())
-      .then(setTimeline)
-  }, [])
+    user && fetchLatestAdrits().then(setTimeline)
+  }, [user])
 
   return (
     <>
       <AppLayout>
-        <header>
-          <h2>Inicio</h2>
+        <header className={s.header}>
+          <h2 className={s.h2}>Inicio</h2>
         </header>
-        <section>
-          {timeline.map(({ id, username, avatar, message }) => (
-            <Adrit
-              avatar={avatar}
-              id={id}
-              key={id}
-              message={message}
-              username={username}
-            />
-          ))}
+        <section className={s.section}>
+          {timeline.map(
+            ({ id, userName, avatar, content, userId, createdAt }) => (
+              <Adrit
+                avatar={avatar}
+                createdAt={createdAt}
+                id={id}
+                key={id}
+                content={content}
+                userName={userName}
+                userId={userId}
+              />
+            )
+          )}
         </section>
-        <nav></nav>
+        <nav className={s.nav}></nav>
       </AppLayout>
-      <style jsx>{`
-        header {
-          align-items: center;
-          border-bottom: 1px solid #ccc;
-          height: 49px;
-          display: flex;
-          position: sticky;
-          top: 0;
-          width: 100%;
-        }
-        h2 {
-          font-size: 21px;
-          font-weight: 800;
-        }
-        section {
-          padding-top: 49px;
-        }
-        nav {
-          bottom: 0;
-          border-top: 1px solid #ccc;
-          height: 49px;
-          position: sticky;
-          width: 100%;
-        }
-      `}</style>
     </>
   )
 }

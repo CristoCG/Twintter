@@ -1,0 +1,12 @@
+.textarea {
+  border: 0;
+  font-size: 21px;
+  padding: 15px;
+  resize: none;
+  width: 100%;
+  outline: 0;
+  min-height: 200px;
+}
+.div {
+  padding: 15px;
+}

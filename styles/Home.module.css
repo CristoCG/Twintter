@@ -45,6 +45,12 @@
   text-align: center;
   text-decoration: none;
   transition-duration: 0.4s;
+  user-select: none;
+}
+
+.btnGit[disabled] {
+  pointer-events: none;
+  opacity: 0.4;
 }
 
 .btnGit:hover {
