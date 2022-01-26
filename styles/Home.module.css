@@ -40,7 +40,7 @@
   margin-top: 8px;
 }
 
-.btnGit{
+.btnGit {
   align-items: center;
   -webkit-transition-duration: 0.4s; /* Safari */
   background-color: rgb(0, 0, 0);
@@ -58,12 +58,11 @@
 }
 
 .btnGit:hover {
- opacity: .7;
+  opacity: 0.7;
 }
 
-
 .imgGit {
-    margin-right: 12px;
+  margin-right: 12px;
 }
 
 @media (min-widht: 520px) {

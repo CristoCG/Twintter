@@ -1,6 +1,5 @@
-import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import firebase from "firebase/app";
+import firebase from "firebase"
+require("firebase/auth")
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzh_UUrs3yvmfpqLw5RMhc48x31VsqtcU",
@@ -10,37 +9,29 @@ const firebaseConfig = {
   messagingSenderId: "131411253494",
   appId: "1:131411253494:web:1eec9f1ce0afd652cbf4d7",
   measurementId: "G-S0TGSPSX86",
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
 }
 
-const mapUserFromFirebaseAppToUser = (user) => {
-  console.log(user);
-  const { additionalUserInfo, email} = user;
-  const {username,profile} = additionalUserInfo;
- const {avatar_url} = profile
+!firebase.apps.length && firebase.initializeApp(firebaseConfig)
+
+const mapUserFromFirebaseAuthToUser = (user) => {
+  const { displayName, email, photoURL } = user
 
   return {
-    avatar: avatar_url,
-    username,
-    email
-  };
-};
-export const onAuthStateChanged = (onChange) => {
-  return firebase.auth().onAuthStateChanged(user =>{
-     const normalizedUser =
-    mapUserFromFirebaseAppToUser(user)
-    onChange(normalizedUser)
+    avatar: photoURL,
+    username: displayName,
+    email,
   }
-    )
-};
+}
+
+export const onAuthStateChanged = (onChange) => {
+  return firebase.auth().onAuthStateChanged((user) => {
+    const normalizedUser = user ? mapUserFromFirebaseAuthToUser(user) : null
+
+    onChange(normalizedUser)
+  })
+}
 
 export const loginWithGitHub = () => {
-  const githubProvider = new firebase.auth.GithubAuthProvider();
-  return firebase
-    .auth()
-    .signInWithPopup(githubProvider)
-    
-};
+  const githubProvider = new firebase.auth.GithubAuthProvider()
+  return firebase.auth().signInWithPopup(githubProvider)
+}

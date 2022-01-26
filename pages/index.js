@@ -1,21 +1,22 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Button from "../components/Button";
-import { loginWithGitHub, onAuthStateChanged } from "../firebase/client";
-import { useEffect, useState } from "react";
+import styles from "../styles/Home.module.css"
+import Head from "next/head"
+import Button from "../components/Button"
+import { loginWithGitHub, onAuthStateChanged } from "../firebase/client"
+import { useEffect, useState } from "react"
 
 export default function Home() {
-  const [user,setUser] = useState(null)
+  const [user, setUser] = useState(null)
 
-  useEffect(()=>{
-   onAuthStateChanged(user => setUser)
-  },[])
+  useEffect(() => {
+    onAuthStateChanged(setUser)
+  }, [])
 
-  const handleClick = () =>{
-    loginWithGitHub().then(setUser).catch(err =>{
-      console.log(err);
-    })
-    
+  const handleClick = () => {
+    loginWithGitHub()
+      .then(setUser)
+      .catch((err) => {
+        console.log(err)
+      })
   }
   return (
     <div>
@@ -34,25 +35,27 @@ export default function Home() {
           </h2>
 
           <div className={styles.div}>
-              {
-              user === null && <Button onClick={handleClick}>
-              <img className={styles.imgGit} src="github-logo_icon-icons.com_73546.svg" width="50px" />
-              Login with GitHub
+            {user === null ? (
+              <Button onClick={handleClick}>
+                <img
+                  className={styles.imgGit}
+                  src="github-logo_icon-icons.com_73546.svg"
+                  width="50px"
+                />
+                Login with GitHub
               </Button>
-              
-            }
-                {             
-                user && user.avatar && <div className={styles.div}>
-                <img src={user.avatar} height={40}/>
-                <strong>{user.username}</strong>
-                </div>}
-              
-
-              
-          
+            ) : (
+              user &&
+              user.avatar && (
+                <div className={styles.div}>
+                  <img src={user.avatar} height={40} />
+                  <strong>{user.username}</strong>
+                </div>
+              )
+            )}
           </div>
         </main>
       </s>
     </div>
-  );
+  )
 }
