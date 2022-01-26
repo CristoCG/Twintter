@@ -1,7 +1,8 @@
 .h1 {
   color: #1c5480;
   font-weight: 800;
-  margin-bottom: 0;
+  margin-bottom: 16;
+  font-size: 32px;
 }
 .h2 {
   color: #0099ff;
@@ -16,28 +17,17 @@
 }
 
 .style {
-  display: grid;
-  place-items: center;
-  height: 100vh;
-  width: 100%;
-  height: 100%;
   align-items: center;
+  display: grid;
+  height: 100%;
   padding: 10vh;
+  place-content: center;
+  place-items: center;
   text-decoration: none;
 }
 
-.main {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  height: 80vh;
-  place-items: center;
-  display: grid;
-  place-content: center;
-}
 .div {
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .btnGit {
@@ -70,4 +60,10 @@
     width: 450px;
     height: 90vh;
   }
+}
+.section {
+  display: grid;
+  height: 100%;
+  place-content: center;
+  place-items: center;
 }

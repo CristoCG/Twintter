@@ -1,8 +1,15 @@
-import styles from "../styles/Home.module.css"
-import Head from "next/head"
-import Button from "../components/Button"
-import { loginWithGitHub, onAuthStateChanged } from "../firebase/client"
+import styles from "styles/Home.module.css"
+
 import { useEffect, useState } from "react"
+
+import { loginWithGitHub, onAuthStateChanged } from "firebase/client"
+
+import Head from "next/head"
+
+import Button from "components/Button"
+import Avatar from "components/Avatar"
+import Logo from "components/Icons/Logo"
+import AppLayout from "components/AppLayout"
 
 export default function Home() {
   const [user, setUser] = useState(null)
@@ -26,9 +33,9 @@ export default function Home() {
         <link rel="icon" href="/origami_bird.ico" />
       </Head>
 
-      <s className={styles.style}>
-        <main className={styles.main}>
-          <img src="/origami_bird.svg" width="120px" />
+      <AppLayout>
+        <s className={styles.style}>
+          <Logo width="100" />
           <h1 className={styles.h1}>Twintter🕊</h1>
           <h2 className={styles.h2}>
             Talk about developments <br /> with developers 👨🏻‍💻👩🏻‍💻
@@ -40,7 +47,8 @@ export default function Home() {
                 <img
                   className={styles.imgGit}
                   src="github-logo_icon-icons.com_73546.svg"
-                  width="50px"
+                  width="24px"
+                  height="24px"
                 />
                 Login with GitHub
               </Button>
@@ -48,14 +56,17 @@ export default function Home() {
               user &&
               user.avatar && (
                 <div className={styles.div}>
-                  <img src={user.avatar} height={40} />
-                  <strong>{user.username}</strong>
+                  <Avatar
+                    src={user.avatar}
+                    alt={user.username}
+                    text={user.username}
+                  />
                 </div>
               )
             )}
           </div>
-        </main>
-      </s>
+        </s>
+      </AppLayout>
     </div>
   )
 }

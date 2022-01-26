@@ -1,0 +1,26 @@
+.head {
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  height: 49px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.nav {
+  border-top: 1px solid #ccc;
+  bottom: 0;
+  height: 49px;
+  position: sticky;
+  width: 100%;
+}
+
+.section {
+  padding-top: 49px;
+}
+.h2 {
+  font-size: 21;
+  font-weight: 800;
+  text-decoration: none;
+}
