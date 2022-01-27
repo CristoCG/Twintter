@@ -1,5 +1,5 @@
-import firebase from "firebase"
-require("firebase/auth")
+import firebase from "firebase/app"
+require("firebase")
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzh_UUrs3yvmfpqLw5RMhc48x31VsqtcU",
@@ -54,22 +54,25 @@ export const addAdrit = ({ avatar, content, userId, userName }) => {
 export const fetchLatestAdrits = () => {
   return db
     .collection("Adrits")
+    .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
       return docs.map((doc) => {
         const data = doc.data()
         const id = doc.id
         const { createdAt } = data
-        const date = new Date(createdAt.seconds * 1000)
-        const normalizedCreatedAt = new Intl.DateTimeFormat("es-ES").format(
-          date
-        )
 
         return {
           ...data,
           id,
-          createdAt: normalizedCreatedAt,
+          createdAt: +createdAt.toDate(),
         }
       })
     })
+}
+
+export const uploadImage = (file) => {
+  const ref = firebase.storage().ref(`images/${file.name}`)
+  const task = ref.put(file)
+  return task
 }

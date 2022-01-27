@@ -6,7 +6,11 @@
   width: 100%;
   outline: 0;
   min-height: 200px;
+  border-radius: 10px;
 }
 .div {
   padding: 15px;
+}
+.form {
+  padding: 10px;
 }

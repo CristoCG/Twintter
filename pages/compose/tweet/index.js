@@ -1,11 +1,12 @@
-import AppLayout from "components/AppLayout"
+import Avatar from "components/Avatar"
 import Button from "components/Button"
-import { addAdrit } from "firebase/client"
+import { addAdrit, uploadImage } from "firebase/client"
 
 import useUser from "hooks/useUser"
+import Head from "next/head"
 import { useRouter } from "next/router"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import s from "styles/ComposeTweet.module.css"
 
@@ -16,18 +17,43 @@ const COMPOSE_STATES = {
   ERROR: -1,
 }
 
+const DRAG_IMAGE_STATES = {
+  ERROR: -1,
+  NONE: 0,
+  DRAG_OVER: 1,
+  UPLOADING: 2,
+  COMPLETE: 3,
+}
+
 export default function ComposeTweet() {
-  const user = useUser()
   const [adrit, setAdrit] = useState("")
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
+
+  const user = useUser()
   const router = useRouter()
 
-  const handleChange = (evt) => {
-    const { value } = evt.target
+  const [drag, setDrag] = useState(DRAG_IMAGE_STATES.NONE)
+  const [task, setTask] = useState(null)
+  const [imgURL, setImgURL] = useState(null)
+
+  useEffect(() => {
+    if (task) {
+      const onProgress = () => {}
+      const onError = () => {}
+      const onComplete = () => {
+        console.log("onComplete")
+        task.snapshot.ref.getDownloadURL().then(setImgURL)
+      }
+
+      task.on("state_changed", onProgress, onError, onComplete)
+    }
+  }, [task])
+  const handleChange = (event) => {
+    const { value } = event.target
     setAdrit(value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     event.preventDefault()
     setStatus(COMPOSE_STATES.LOADING)
     addAdrit({
@@ -35,24 +61,58 @@ export default function ComposeTweet() {
       content: adrit,
       userId: user.uid,
       userName: user.username,
+      img: imgURL,
     })
       .then(() => {
         router.push("/home")
       })
       .catch((err) => {
-        console.log(err)
+        console.error(err)
         setStatus(COMPOSE_STATES.ERROR)
       })
+  }
+
+  const handleDragEnter = (e) => {
+    e.preventDefault()
+    setDrag(DRAG_IMAGE_STATES.DRAG_OVER)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    setDrag(DRAG_IMAGE_STATES.NONE)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setDrag(DRAG_IMAGE_STATES.NONE)
+    const file = e.dataTransfer.files[0]
+    console.log()
+
+    const task = uploadImage(file)
+    setTask(task)
   }
 
   const isButtonDisabled = !adrit.length || status === COMPOSE_STATES.LOADING
 
   return (
     <>
-      <AppLayout>
-        <form onSubmit={handleSubmit}>
+      <Head>
+        <title>Adrittear | Twintter🕊</title>
+        <meta name="description" content="Creada con Next." />
+        <link rel="icon" href="/origami_bird.ico" />
+      </Head>
+      <section className="form-container">
+        {user && (
+          <section className="avatar-container">
+            <Avatar src={user.avatar} />
+          </section>
+        )}
+        <form className={s.form} onSubmit={handleSubmit}>
           <textarea
             onChange={handleChange}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             className={s.textarea}
             placeholder="¿Qué está pasando?"
             value={adrit}
@@ -61,7 +121,15 @@ export default function ComposeTweet() {
             <Button disabled={isButtonDisabled}>Adrittear</Button>
           </div>
         </form>
-      </AppLayout>
+      </section>
+
+      <style jsx>{`
+        textarea {
+          border: ${drag === DRAG_IMAGE_STATES.DRAG_OVER
+            ? "3px dashed #6F0A83"
+            : "3px solid transparent"};
+        }
+      `}</style>
     </>
   )
 }
