@@ -72,4 +72,8 @@
   height: 100%;
   place-content: center;
   place-items: center;
+  overflow: hidden;
+}
+.main {
+  overflow: hidden;
 }

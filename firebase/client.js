@@ -2,13 +2,13 @@ import firebase from "firebase/app"
 require("firebase")
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDzh_UUrs3yvmfpqLw5RMhc48x31VsqtcU",
-  authDomain: "twintter-c0e55.firebaseapp.com",
-  projectId: "twintter-c0e55",
-  storageBucket: "twintter-c0e55.appspot.com",
-  messagingSenderId: "131411253494",
-  appId: "1:131411253494:web:1eec9f1ce0afd652cbf4d7",
-  measurementId: "G-S0TGSPSX86",
+  apiKey: "AIzaSyBDFs2z-7iom3BI5ZylcfYQHTqtBEBkk_o",
+  authDomain: "twintterv2.firebaseapp.com",
+  projectId: "twintterv2",
+  storageBucket: "twintterv2.appspot.com",
+  messagingSenderId: "477496710266",
+  appId: "1:477496710266:web:3fbd0fbf2378bda0ed97c3",
+  measurementId: "G-BNYL8RGB2Y",
 }
 
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
@@ -39,12 +39,12 @@ export const loginWithGitHub = () => {
   return firebase.auth().signInWithPopup(githubProvider)
 }
 
-export const addAdrit = ({ avatar, content, userId, userName, img }) => {
-  return db.collection("Adrits").add({
+export const addAdrit = ({ avatar, content, img, userId, userName }) => {
+  return db.collection("Adrit").add({
     avatar,
     content,
-    userId,
     img,
+    userId,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     likesCount: 0,
@@ -54,7 +54,7 @@ export const addAdrit = ({ avatar, content, userId, userName, img }) => {
 
 export const fetchLatestAdrits = () => {
   return db
-    .collection("Adrits")
+    .collection("Adrit")
     .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
