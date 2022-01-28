@@ -30,11 +30,12 @@ export default function HomePage() {
       </header>
       <section className={s.section}>
         {timeline.map(
-          ({ id, userName, avatar, content, userId, createdAt }) => (
+          ({ id, userName, avatar, content, img, userId, createdAt }) => (
             <Adrit
               avatar={avatar}
               createdAt={createdAt}
               id={id}
+              img={img}
               key={id}
               content={content}
               userName={userName}

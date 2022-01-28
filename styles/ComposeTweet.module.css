@@ -14,3 +14,15 @@
 .form {
   padding: 10px;
 }
+.avatar-container {
+  padding-top: 20px;
+  padding-left: 10px;
+}
+.avatarContainer {
+  padding-top: 20px;
+  padding-left: 10px;
+}
+.formContainer {
+  align-items: flex-start;
+  display: flex;
+}

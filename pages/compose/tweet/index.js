@@ -101,9 +101,9 @@ export default function ComposeTweet() {
         <meta name="description" content="Creada con Next." />
         <link rel="icon" href="/origami_bird.ico" />
       </Head>
-      <section className="form-container">
+      <section className={s.formContainer}>
         {user && (
-          <section className="avatar-container">
+          <section className={s.avatarContainer}>
             <Avatar src={user.avatar} />
           </section>
         )}
@@ -117,6 +117,12 @@ export default function ComposeTweet() {
             placeholder="¿Qué está pasando?"
             value={adrit}
           ></textarea>
+          {imgURL && (
+            <section>
+              <button onClick={() => setImgURL(null)}>X</button>
+              <img src={imgURL} />
+            </section>
+          )}
           <div className={s.div}>
             <Button disabled={isButtonDisabled}>Adrittear</Button>
           </div>
@@ -124,6 +130,26 @@ export default function ComposeTweet() {
       </section>
 
       <style jsx>{`
+        button {
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 999px;
+          border: 0;
+          color: #fff;
+          font-size: 24px;
+          height: 32px;
+          position: absolute;
+          right: 15px;
+          top: 15px;
+          width: 32px;
+        }
+        img {
+          border-radius: 10px;
+          height: auto;
+          width: 100%;
+        }
+        section {
+          position: relative;
+        }
         textarea {
           border: ${drag === DRAG_IMAGE_STATES.DRAG_OVER
             ? "3px dashed #6F0A83"

@@ -2,7 +2,14 @@ import Avatar from "components/Avatar"
 import useTimeAgo from "hooks/useTimeAgo"
 import styles from "styles/Adrit.module.css"
 
-export default function Adrit({ avatar, userName, content, id, createdAt }) {
+export default function Adrit({
+  avatar,
+  userName,
+  content,
+  img,
+  id,
+  createdAt,
+}) {
   const timeago = useTimeAgo(createdAt)
   return (
     <>
@@ -19,6 +26,7 @@ export default function Adrit({ avatar, userName, content, id, createdAt }) {
             </date>
           </header>
           <p className={styles.p}>{content}</p>
+          {img && <img className={styles.img} src={img} />}
         </section>
       </article>
     </>

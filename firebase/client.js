@@ -39,11 +39,12 @@ export const loginWithGitHub = () => {
   return firebase.auth().signInWithPopup(githubProvider)
 }
 
-export const addAdrit = ({ avatar, content, userId, userName }) => {
+export const addAdrit = ({ avatar, content, userId, userName, img }) => {
   return db.collection("Adrits").add({
     avatar,
     content,
     userId,
+    img,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     likesCount: 0,
