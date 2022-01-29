@@ -1,5 +1,8 @@
 import Avatar from "components/Avatar"
+import useDateTimeFormat from "hooks/useDateTimeFormat"
 import useTimeAgo from "hooks/useTimeAgo"
+import Link from "next/link"
+import router from "next/router"
 import styles from "styles/Adrit.module.css"
 
 export default function Adrit({
@@ -11,9 +14,16 @@ export default function Adrit({
   createdAt,
 }) {
   const timeago = useTimeAgo(createdAt)
+  const createdAtFormated = useDateTimeFormat(createdAt)
+
+  const handleArticleClick = (e) => {
+    e.preventDefault()
+    router.push(`/status/${id}`)
+  }
+
   return (
     <>
-      <article className={styles.article}>
+      <article onClick={handleArticleClick} className={styles.article}>
         <div className={styles.div}>
           <Avatar src={avatar} alt={userName} />
         </div>
@@ -21,9 +31,13 @@ export default function Adrit({
           <header>
             <strong>{userName}</strong>
             <span>🔘</span>
-            <date className={styles.date}>
-              <em>{timeago}</em>
-            </date>
+            <Link href={`status/${id}`}>
+              <a className={styles.a}>
+                <time title={createdAtFormated}>
+                  <em>{timeago}</em>
+                </time>
+              </a>
+            </Link>
           </header>
           <p className={styles.p}>{content}</p>
           {img && <img className={styles.img} src={img} />}

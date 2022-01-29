@@ -4,6 +4,10 @@
   border-bottom: 1px solid #eee;
 }
 
+.article:hover {
+  background: #f5f8fa;
+  cursor: pointer;
+}
 .div {
   padding-right: 10px;
 }
@@ -11,9 +15,14 @@
   margin: 0;
   line-height: 1.3125;
 }
-.date {
+.a {
   color: #555;
   font-size: 14px;
+  text-decoration: none;
+}
+
+.a:hover {
+  text-decoration: underline;
 }
 
 .img {
