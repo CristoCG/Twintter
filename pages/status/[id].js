@@ -6,7 +6,7 @@ import { useRouter } from "next/router"
 export default function AdritPage(props) {
   const router = useRouter()
 
-  if (router.isFallback) return <img src="/loading.gif" width={100}></img>
+  if (router.isFallback) return <img src="/loading.gif" width={500}></img>
 
   return (
     <>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Adrit from "components/Adrit"
 import s from "styles/HomePage.module.css"
 import useUser from "hooks/useUser"
-import { fetchLatestAdrits } from "firebase/client"
+import { listenLatestAdrits } from "firebase/client"
 import Link from "next/link"
 import Write from "components/Icons/Write"
 import Home from "components/Icons/Home"
@@ -14,7 +14,11 @@ export default function HomePage() {
   const user = useUser()
 
   useEffect(() => {
-    user && fetchLatestAdrits().then(setTimeline)
+    let unsubscribe
+    if (user) {
+      unsubscribe = listenLatestAdrits(setTimeline)
+    }
+    return () => unsubscribe && unsubscribe()
   }, [user])
 
   return (

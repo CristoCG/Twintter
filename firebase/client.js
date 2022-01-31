@@ -52,23 +52,26 @@ export const addAdrit = ({ avatar, content, img, userId, userName }) => {
   })
 }
 
-export const fetchLatestAdrits = () => {
+export const mapAdritFromFirebaseToAdritObject = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  }
+}
+
+export const listenLatestAdrits = (callback) => {
   return db
     .collection("Adrit")
     .orderBy("createdAt", "desc")
-    .get()
-    .then(({ docs }) => {
-      return docs.map((doc) => {
-        const data = doc.data()
-        const id = doc.id
-        const { createdAt } = data
-
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
-        }
-      })
+    .limit(20)
+    .onSnapshot(({ docs }) => {
+      const newAdrits = docs.map(mapAdritFromFirebaseToAdritObject)
+      callback(newAdrits)
     })
 }
 
