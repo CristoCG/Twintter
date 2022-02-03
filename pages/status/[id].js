@@ -34,7 +34,7 @@ export const getServerSideProps = async (context) => {
   const { id } = params
 
   const apiResponse = await fetch(
-    `https://twintter-qc0k5qp0x-cristocg.vercel.app/api/adrits/${id}`
+    `https://twintter.vercel.app/api/adrits/${id}`
   )
   console.log(apiResponse)
   if (apiResponse.ok) {
