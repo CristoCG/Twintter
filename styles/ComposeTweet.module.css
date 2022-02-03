@@ -24,3 +24,6 @@
   align-items: flex-start;
   display: flex;
 }
+.section {
+  flex: 1;
+}

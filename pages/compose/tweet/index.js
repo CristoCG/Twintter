@@ -1,5 +1,6 @@
 import Avatar from "components/Avatar"
 import Button from "components/Button"
+import NavigationBar from "components/NavigationBar"
 import { addAdrit, uploadImage } from "firebase/client"
 
 import useUser from "hooks/useUser"
@@ -101,33 +102,37 @@ export default function ComposeTweet() {
         <meta name="description" content="Creada con Next." />
         <link rel="icon" href="/origami_bird.ico" />
       </Head>
-      <section className={s.formContainer}>
-        {user && (
-          <section className={s.avatarContainer}>
-            <Avatar src={user.avatar} />
-          </section>
-        )}
-        <form className={s.form} onSubmit={handleSubmit}>
-          <textarea
-            onChange={handleChange}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={s.textarea}
-            placeholder="¿Qué está pasando?"
-            value={adrit}
-          ></textarea>
-          {imgURL && (
-            <section>
-              <button onClick={() => setImgURL(null)}>X</button>
-              <img src={imgURL} />
+      <section className={s.section}>
+        <section className={s.formContainer}>
+          {user && (
+            <section className={s.avatarContainer}>
+              <Avatar src={user.avatar} />
             </section>
           )}
-          <div className={s.div}>
-            <Button disabled={isButtonDisabled}>Adrittear</Button>
-          </div>
-        </form>
+          <form className={s.form} onSubmit={handleSubmit}>
+            <textarea
+              onChange={handleChange}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={s.textarea}
+              placeholder="¿Qué está pasando?"
+              value={adrit}
+            ></textarea>
+            {imgURL && (
+              <section>
+                <button onClick={() => setImgURL(null)}>X</button>
+                <img src={imgURL} />
+              </section>
+            )}
+            <div className={s.div}>
+              <Button disabled={isButtonDisabled}>Adrittear</Button>
+            </div>
+          </form>
+        </section>
       </section>
+
+      <NavigationBar composeAdrit={false} />
 
       <style jsx>{`
         button {
