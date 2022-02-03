@@ -1,7 +1,9 @@
 import Adrit from "components/Adrit"
-import { firestore } from "firebase/admin"
+import Header from "components/Header"
+import NavigationBar from "components/NavigationBar"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import s from "styles/HomePage.module.css"
 
 export default function AdritPage(props) {
   const router = useRouter()
@@ -15,39 +17,31 @@ export default function AdritPage(props) {
         <meta name="description" content="Creada con Next." />
         <link rel="icon" href="/origami_bird.ico" />
       </Head>
-      <Adrit {...props} />
+
+      <Header>Adrit</Header>
+
+      <section className={s.section}>
+        <Adrit {...props} />
+      </section>
+
+      <NavigationBar />
     </>
   )
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [{ params: { id: "2v6O59t32Pr9Kxt1cykC" } }],
-    fallback: true,
-  }
-}
-
-export async function getStaticProps(context) {
-  const { params } = context
+export const getServerSideProps = async (context) => {
+  const { params, res } = context
   const { id } = params
 
-  return firestore
-    .collection("Adrit")
-    .doc(id)
-    .get()
-    .then((doc) => {
-      const data = doc.data()
-      const id = doc.id
-      const { createdAt } = data
-
-      const props = {
-        ...data,
-        id,
-        createdAt: +createdAt.toDate(),
-      }
-      return { props }
-    })
-    .catch(() => {
-      return { props: {} }
-    })
+  const apiResponse = await fetch(
+    `https://twintter-qc0k5qp0x-cristocg.vercel.app/api/adrits/${id}`
+  )
+  console.log(apiResponse)
+  if (apiResponse.ok) {
+    const props = await apiResponse.json()
+    return { props }
+  }
+  if (res) {
+    res.writeHead(301, { Location: "/home" }).end()
+  }
 }

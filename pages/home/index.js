@@ -3,11 +3,9 @@ import Adrit from "components/Adrit"
 import s from "styles/HomePage.module.css"
 import useUser from "hooks/useUser"
 import { listenLatestAdrits } from "firebase/client"
-import Link from "next/link"
-import Write from "components/Icons/Write"
-import Home from "components/Icons/Home"
-import Search from "components/Icons/Search"
 import Head from "next/head"
+import NavigationBar from "components/NavigationBar"
+import Header from "components/Header"
 
 export default function HomePage() {
   const [timeline, setTimeline] = useState([])
@@ -29,9 +27,8 @@ export default function HomePage() {
         <link rel="icon" href="/origami_bird.ico" />
       </Head>
 
-      <header className={s.header}>
-        <h2 className={s.h2}>Inicio</h2>
-      </header>
+      <Header>Inicio</Header>
+
       <section className={s.section}>
         {timeline.map(
           ({ id, userName, avatar, content, img, userId, createdAt }) => (
@@ -48,23 +45,8 @@ export default function HomePage() {
           )
         )}
       </section>
-      <nav className={s.nav}>
-        <Link href="/home">
-          <a className={s.a}>
-            <Home width={40} height={40} stroke="#BC00FF" />
-          </a>
-        </Link>
-        <Link href="/search">
-          <a className={s.a}>
-            <Search width={40} height={40} stroke="#BC00FF" />
-          </a>
-        </Link>
-        <Link href="/compose/tweet">
-          <a className={s.a}>
-            <Write width={40} height={40} stroke="#BC00FF" />
-          </a>
-        </Link>
-      </nav>
+
+      <NavigationBar />
     </>
   )
 }
