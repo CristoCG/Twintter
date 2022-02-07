@@ -1,0 +1,23 @@
+.section {
+  flex: 1 1 auto;
+}
+
+.userName {
+  margin: 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.img {
+  width: 150px;
+  border-radius: 9999px;
+}
+
+.main {
+  width: 100%;
+  padding: 24px 16px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: #ffffffaa;
+}

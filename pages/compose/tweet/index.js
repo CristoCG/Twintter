@@ -146,6 +146,7 @@ export default function ComposeTweet() {
           right: 15px;
           top: 15px;
           width: 32px;
+          cursor: pointer;
         }
         img {
           border-radius: 10px;
@@ -154,6 +155,7 @@ export default function ComposeTweet() {
         }
         section {
           position: relative;
+          flex: 1 1 auto;
         }
         textarea {
           border: ${drag === DRAG_IMAGE_STATES.DRAG_OVER

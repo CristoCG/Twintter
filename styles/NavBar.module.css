@@ -3,9 +3,10 @@
   border-top: 1px solid #eee;
   bottom: 0;
   display: flex;
-  height: 49px;
+  height: 60px;
   position: sticky;
   width: 100%;
+  flex: 0 1 auto;
 }
 
 .a {

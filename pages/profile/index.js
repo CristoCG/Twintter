@@ -1,79 +1,73 @@
-import { useEffect, useState } from "react"
 import Adrit from "components/Adrit"
-import s from "styles/HomePage.module.css"
-import useUser from "hooks/useUser"
-import { listenLatestAdrits } from "firebase/client"
-import Head from "next/head"
-import NavigationBar from "components/NavigationBar"
+import Dropdown from "components/Dropdown"
 import Header from "components/Header"
+import NavigationBar from "components/NavigationBar"
+import { getProfile } from "firebase/client"
+import useUser from "hooks/useUser"
+import Head from "next/head"
+import { useEffect, useState } from "react"
+import s from "styles/Profile.module.css"
 
-export default function HomePage() {
+export default function Profile() {
   const [timeline, setTimeline] = useState([])
   const user = useUser()
 
   useEffect(() => {
     let unsubscribe
     if (user) {
-      unsubscribe = listenLatestAdrits(setTimeline)
+      unsubscribe = getProfile(setTimeline, user.uid)
     }
     return () => unsubscribe && unsubscribe()
   }, [user])
-
   return (
     <>
       <Head>
-        <title>Home | Twintter🕊</title>
+        <title>Profile | Twintter🕊</title>
         <meta name="description" content="Creada con Next." />
         <link rel="icon" href="/origami_bird.ico" />
       </Head>
 
-      <Header>Inicio</Header>
+      <main className={s.main}>
+        {user && (
+          <>
+            <img src={user.avatar} className={s.img} />
 
+            <p className={s.userName}>{user.username}</p>
+          </>
+        )}
+        <Dropdown />
+      </main>
+      <Header>Tus Twintt&apos;s</Header>
       <section className={s.section}>
         {timeline.map(
           ({
+            likesCount,
+            createdAt,
+            img,
             id,
             userName,
             avatar,
             content,
-            img,
             userId,
-            createdAt,
-            likesCount,
             alreadyLiked,
           }) => (
             <Adrit
               avatar={avatar}
+              content={content}
               createdAt={createdAt}
+              likesCount={likesCount}
               id={id}
               img={img}
               key={id}
-              content={content}
-              userName={userName}
               userId={userId}
-              likesCount={likesCount}
+              userName={userName}
               alreadyLiked={alreadyLiked}
             />
           )
         )}
       </section>
 
-      <NavigationBar inHome={true} inProfile={false} />
-
-      <style jsx>{`
-        button {
-          background: rgba(0, 0, 0, 0.3);
-          border-radius: 999px;
-          border: 0;
-          color: #fff;
-          font-size: 24px;
-          height: 32px;
-          position: absolute;
-          right: 15px;
-          top: 15px;
-          width: 32px;
-        }
-      `}</style>
+      <NavigationBar inHome={false} inProfile={true} />
     </>
   )
 }
