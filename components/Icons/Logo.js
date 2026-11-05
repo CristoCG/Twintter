@@ -3,7 +3,7 @@ import * as React from "react"
 export default function Logo(props) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74.5 73.03" {...props}>
-      <title>{"Recurso 330"}</title>
+      <title>{"Twintter"}</title>
       <g data-name="Capa 2">
         <g data-name="Capa 1">
           <rect

@@ -41,8 +41,9 @@ export default function useTimeAgo(timestamp) {
     return formatDate(timestamp)
   }
 
-  const rtf = new Intl.RelativeTimeFormat("es", { style: "long" })
-
   const { value, unit } = timeago
+  if (unit === "second" && Math.abs(value) < 10) return "justo ahora"
+
+  const rtf = new Intl.RelativeTimeFormat("es", { style: "long" })
   return rtf.format(value, unit)
 }

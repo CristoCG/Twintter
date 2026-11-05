@@ -1,63 +1,100 @@
-import { logout } from "firebase/client"
+import { useEffect, useRef, useState } from "react"
+import { logout, resetDemo } from "lib/demoStore"
 import { colors } from "styles/theme"
 
 export default function Dropdown() {
-  const handleClick = () => {
-    logout().catch((err) => {
-      console.log(err)
-    })
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const close = (e) => {
+      if (!ref.current?.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener("click", close)
+    return () => document.removeEventListener("click", close)
+  }, [open])
+
+  const handleReset = () => {
+    if (
+      window.confirm(
+        "Se borrarán tus twintts, likes y usuario de esta demo. ¿Continuar?"
+      )
+    ) {
+      resetDemo()
+    }
   }
 
   return (
     <>
-      <div className="dropdown">
-        <button className="dropbtn">+</button>
-        <div className="dropdown-content">
-          <a onClick={handleClick}>Log out</a>
-        </div>
+      <div className="dropdown" ref={ref}>
+        <button
+          className="dropbtn"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-label="Opciones"
+        >
+          ⋯
+        </button>
+        {open && (
+          <div className="dropdown-content" role="menu">
+            <button role="menuitem" onClick={logout}>
+              Cerrar sesión
+            </button>
+            <button role="menuitem" className="danger" onClick={handleReset}>
+              Reiniciar demo
+            </button>
+          </div>
+        )}
       </div>
       <style jsx>{`
-        .dropbtn {
-          background-color: ${colors.secondary};
-          color: white;
-          padding: 16px;
-          font-size: 16px;
-          border: none;
-          border-radius: 16px;
-          cursor: pointer;
-        }
         .dropdown {
           position: absolute;
-          display: inline-block;
           right: 16px;
+          top: 16px;
+        }
+        .dropbtn {
+          background-color: ${colors.secondary};
+          border: none;
+          border-radius: 999px;
+          color: white;
+          cursor: pointer;
+          font-size: 20px;
+          height: 40px;
+          line-height: 1;
+          width: 40px;
+        }
+        .dropbtn:hover,
+        .dropbtn[aria-expanded="true"] {
+          background-color: ${colors.primary};
         }
         .dropdown-content {
-          display: none;
+          background-color: #fff;
+          border-radius: 12px;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+          margin-top: 6px;
+          min-width: 170px;
+          overflow: hidden;
           position: absolute;
-          border-radius: 10px;
-          margin-top: 2px;
           right: 0;
-          background-color: #f9f9f9;
-          min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-          z-index: 1;
+          z-index: 5;
         }
-        .dropdown-content a {
-          color: black;
+        .dropdown-content button {
+          background: transparent;
+          border: 0;
+          color: #222;
           cursor: pointer;
-          border-radius: 10px;
+          display: block;
+          font-size: 15px;
           padding: 12px 16px;
-          text-decoration: none;
-          display: block;
+          text-align: left;
+          width: 100%;
         }
-        .dropdown-content a:hover {
-          background-color: ${colors.secondary};
+        .dropdown-content button:hover {
+          background-color: #faf5ff;
         }
-        .dropdown:hover .dropdown-content {
-          display: block;
-        }
-        .dropdown:hover .dropbtn {
-          background-color: ${colors.primary};
+        .dropdown-content .danger {
+          color: #e0245e;
         }
       `}</style>
     </>

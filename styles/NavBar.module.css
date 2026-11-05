@@ -3,25 +3,23 @@
   border-top: 1px solid #eee;
   bottom: 0;
   display: flex;
+  flex: 0 0 auto;
   height: 60px;
   position: sticky;
   width: 100%;
-  flex: 0 1 auto;
+  z-index: 2;
 }
 
 .a {
+  align-items: center;
   display: flex;
   flex: 1 1 auto;
   height: 100%;
   justify-content: center;
 }
 
-.a :hover {
+.a:hover {
   background: radial-gradient(#9900ff22 15%, transparent 16%);
   background-size: 180px 180px;
   background-position: center;
-}
-
-.a :hover > :global(svg) {
-  stroke: "#0099ff";
 }

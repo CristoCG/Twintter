@@ -1,73 +1,74 @@
-import Adrit from "components/Adrit"
+import { useEffect, useState } from "react"
+import Head from "next/head"
+import Link from "next/link"
+
+import Avatar from "components/Avatar"
 import Dropdown from "components/Dropdown"
 import Header from "components/Header"
 import NavigationBar from "components/NavigationBar"
-import { getProfile } from "firebase/client"
+import Timeline from "components/Timeline"
 import useUser from "hooks/useUser"
-import Head from "next/head"
-import { useEffect, useState } from "react"
+import { listenUserTwintts } from "lib/demoStore"
 import s from "styles/Profile.module.css"
 
 export default function Profile() {
-  const [timeline, setTimeline] = useState([])
+  const [timeline, setTimeline] = useState(null)
   const user = useUser()
 
   useEffect(() => {
-    let unsubscribe
-    if (user) {
-      unsubscribe = getProfile(setTimeline, user.uid)
-    }
-    return () => unsubscribe && unsubscribe()
+    if (user) return listenUserTwintts(user.uid, setTimeline)
   }, [user])
+
+  const likesReceived = (timeline || []).reduce(
+    (sum, t) => sum + t.likesCount,
+    0
+  )
+
   return (
     <>
       <Head>
-        <title>Profile | Twintter🕊</title>
-        <meta name="description" content="Creada con Next." />
-        <link rel="icon" href="/origami_bird.ico" />
+        <title>Perfil | Twintter🕊</title>
       </Head>
 
-      <main className={s.main}>
+      <section className={s.main}>
         {user && (
           <>
-            <img src={user.avatar} className={s.img} />
-
+            <Avatar
+              alt={user.username}
+              src={user.avatar}
+              color={user.color}
+              size={120}
+            />
             <p className={s.userName}>{user.username}</p>
+            <p className={s.handle}>@{user.handle}</p>
+            {user.bio && <p className={s.bio}>{user.bio}</p>}
+            <div className={s.stats}>
+              <span>
+                <strong>{timeline ? timeline.length : "–"}</strong> twintts
+              </span>
+              <span>
+                <strong>{timeline ? likesReceived : "–"}</strong> likes
+                recibidos
+              </span>
+            </div>
           </>
         )}
         <Dropdown />
-      </main>
-      <Header>Tus Twintt&apos;s</Header>
-      <section className={s.section}>
-        {timeline.map(
-          ({
-            likesCount,
-            createdAt,
-            img,
-            id,
-            userName,
-            avatar,
-            content,
-            userId,
-            alreadyLiked,
-          }) => (
-            <Adrit
-              avatar={avatar}
-              content={content}
-              createdAt={createdAt}
-              likesCount={likesCount}
-              id={id}
-              img={img}
-              key={id}
-              userId={userId}
-              userName={userName}
-              alreadyLiked={alreadyLiked}
-            />
-          )
-        )}
       </section>
 
-      <NavigationBar inHome={false} inProfile={true} />
+      <Header>Tus twintts</Header>
+
+      <Timeline
+        twintts={timeline}
+        empty={
+          <>
+            Todavía no has twinteado nada.{" "}
+            <Link href="/compose/tweet">Escribe tu primer twintt</Link>
+          </>
+        }
+      />
+
+      <NavigationBar active="profile" />
     </>
   )
 }

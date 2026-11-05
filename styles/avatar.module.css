@@ -2,12 +2,26 @@
   border-radius: 9999px;
   height: 49px;
   width: 49px;
+  object-fit: cover;
 }
+
+.initials {
+  align-items: center;
+  border-radius: 9999px;
+  color: #fff;
+  display: flex;
+  flex-shrink: 0;
+  font-weight: 700;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
 .container {
   display: flex;
   align-items: center;
 }
 
-.avatar + strong {
+.container strong {
   margin: 8px;
 }

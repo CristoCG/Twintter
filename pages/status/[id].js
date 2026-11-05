@@ -1,58 +1,48 @@
-import Adrit from "components/Adrit"
+import { useEffect, useState } from "react"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
+
 import Header from "components/Header"
 import NavigationBar from "components/NavigationBar"
-import Head from "next/head"
-import { useRouter } from "next/router"
+import Twintt from "components/Twintt"
+import useUser from "hooks/useUser"
+import { listenTwintt } from "lib/demoStore"
 import s from "styles/HomePage.module.css"
 
-export default function AdritPage(props) {
+export default function TwinttPage() {
   const router = useRouter()
+  const user = useUser()
+  const { id } = router.query
+  // undefined = cargando, null = no existe
+  const [twintt, setTwintt] = useState(undefined)
 
-  if (router.isFallback) return <img src="/loading.gif" width={500}></img>
+  useEffect(() => {
+    if (user && id) return listenTwintt(id, setTwintt)
+  }, [user, id])
+
   return (
     <>
       <Head>
         <title>Twintt | Twintter🕊</title>
-        <meta name="description" content="Creada con Next." />
-        <link rel="icon" href="/origami_bird.ico" />
       </Head>
 
       <Header>Twintt</Header>
 
       <section className={s.section}>
-        <Adrit
-          avatar={props.avatar}
-          createdAt={props.createdAt}
-          id={props.id}
-          img={props.img}
-          key={props.id}
-          content={props.content}
-          userName={props.userName}
-          userId={props.userId}
-          likesCount={props.likesCount}
-          alreadyLiked={props.alreadyLiked}
-        />
+        {twintt === undefined && <p className={s.empty}>Cargando…</p>}
+        {twintt === null && (
+          <div className={s.empty}>
+            Este twintt no existe o fue borrado.{" "}
+            <Link href="/home">Volver al inicio</Link>
+          </div>
+        )}
+        {twintt && (
+          <Twintt {...twintt} onDeleted={() => router.replace("/home")} />
+        )}
       </section>
 
       <NavigationBar />
     </>
   )
-}
-
-export const getServerSideProps = async (context) => {
-  const { params, res } = context
-  const { id } = params
-
-  const apiResponse = await fetch(
-    `https://twintter.vercel.app/api/adrits/${id}`
-  )
-  console.log(apiResponse)
-
-  if (apiResponse.ok) {
-    const props = await apiResponse.json()
-    return { props }
-  }
-  if (res) {
-    res.writeHead(301, { Location: "/home" }).end()
-  }
 }

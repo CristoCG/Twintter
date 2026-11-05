@@ -1,63 +1,56 @@
 import Heart from "components/Icons/Heart"
-import { likeAdrit, unlikeAdrit } from "firebase/client"
+import { toggleLike } from "lib/demoStore"
 import { colors } from "styles/theme"
 
 export default function Like({ likesCount, alreadyLiked, id }) {
   const handleLikeClick = (e) => {
-    e.preventDefault()
-    if (alreadyLiked === false) {
-      likeAdrit(id, likesCount)
-        .then(() => {
-          console.log("diste like")
-        })
-        .catch((e) => {
-          console.log("No se pudo dar like ", e)
-        })
-    } else if (alreadyLiked === true) {
-      unlikeAdrit(id, likesCount)
-        .then(() => {
-          console.log("quitaste el like")
-        })
-        .catch((e) => {
-          console.log("No se pudo dar like ", e)
-        })
-    }
-  }
-
-  function likeIt(alreadyLiked) {
-    if (alreadyLiked) {
-      return "#AB00FF"
-    }
-    return "transparent"
+    e.stopPropagation()
+    toggleLike(id)
   }
 
   return (
     <>
-      <div className="likes" onClick={handleLikeClick}>
-        <span>{likesCount} </span>
+      <button
+        className={alreadyLiked ? "likes liked" : "likes"}
+        onClick={handleLikeClick}
+        aria-pressed={alreadyLiked}
+        aria-label={alreadyLiked ? "Quitar me gusta" : "Me gusta"}
+      >
         <Heart
-          width={28}
-          height={28}
-          stroke="#BC00FF"
-          className="heart"
-          fill={likeIt(alreadyLiked)}
+          width={26}
+          height={26}
+          stroke={colors.secondary}
+          fill={alreadyLiked ? colors.primary : "transparent"}
         />
-      </div>
+        <span>{likesCount}</span>
+      </button>
       <style jsx>{`
         .likes {
-          display: flex;
-          padding: 0 0 0 5px;
-          justify-self: end;
           align-items: center;
+          background: transparent;
+          border: 0;
+          border-radius: 999px;
+          color: #6b6b7b;
+          cursor: pointer;
+          display: flex;
+          font-size: 14px;
+          gap: 2px;
+          padding: 2px 10px 2px 4px;
         }
-
         .likes:hover {
-          background: radial-gradient(#0099ff22, transparent);
-          background-size: 180px 180px;
-          background-position: center;
+          background: ${colors.primary}14;
+          color: ${colors.primary};
         }
-        .likes:hover > :global(svg) {
-          stroke: ${colors.secondary};
+        .liked {
+          color: ${colors.primary};
+        }
+        .liked > :global(svg) {
+          animation: pop 0.3s ease-out;
+        }
+        @keyframes pop {
+          50% {
+            transform: scale(1.3);
+          }
         }
       `}</style>
     </>
